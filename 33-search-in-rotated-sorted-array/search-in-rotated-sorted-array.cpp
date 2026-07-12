@@ -12,7 +12,6 @@ public:
                 else
                     l = m + 1;
                 }
-            // Right half is sorted
             else {
                 if (nums[m] < target && target <= nums[r])
                     l = m + 1;
