@@ -5,7 +5,7 @@ public:
         vector<int> res(n,1);
         int pre = 1;
         for(int i = 0; i<n; i++){
-            res[i] = pre * res[i];
+            res[i] = pre ;//* res[i];
             pre = pre * nums[i];
         }
 
