@@ -1,8 +1,8 @@
 class Solution {
 public:
+    vector<vector<int>> ans;
     void findSubset(vector<int>& nums, int i,
-                    vector<int>& subset,
-                    vector<vector<int>>& ans) {
+                    vector<int>& subset) {
 
         // Base case: all elements have been considered
         if (i == nums.size()) {
@@ -12,20 +12,20 @@ public:
 
         // Include nums[i]
         subset.push_back(nums[i]);
-        findSubset(nums, i + 1, subset, ans);
+        findSubset(nums, i + 1, subset);
 
         // Backtrack
         subset.pop_back();
 
         // Exclude nums[i]
-        findSubset(nums, i + 1, subset, ans);
+        findSubset(nums, i + 1, subset);
     }
 
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
+        
         vector<int> subset;
 
-        findSubset(nums, 0, subset, ans);
+        findSubset(nums, 0, subset);
 
         return ans;
     }
