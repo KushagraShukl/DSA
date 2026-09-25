@@ -1,92 +1,44 @@
 class Solution {
 public:
-    int leastInterval(vector<char>& tasks, int n) {
-
-        // Step 1: Count the frequency of every task
-        unordered_map<char, int> freq;
-
-        for (char task : tasks) {
-            freq[task]++;
+    int leastInterval(vector<char>& tasks, int p) {
+        int n = tasks.size();
+        unordered_map<char, int> mp;
+        
+        for(char &ch : tasks) {
+            mp[ch]++;
         }
 
-
-        // Step 2: Create a max heap
-        // The task with the highest frequency will be on top.
-        priority_queue<int> pq;
-
-        for (auto it : freq) {
+        priority_queue<int> pq; //max heap
+        //we want to finish the process which is most occurring (having highest frequency)
+        //so that we don't have to finish in the last with p gaps.
+        int time = 0;
+        
+        for(auto &it : mp) {
             pq.push(it.second);
         }
-
-
-        // Step 3: Cooldown queue
-        //
-        // We store:
-        // {remaining frequency, time when task becomes available}
-        //
-        // Example:
-        // {2, 5} means:
-        //   - 2 occurrences of this task are still remaining
-        //   - task can be used again at time 5
-        queue<pair<int, int>> cooldown;
-
-
-        // Current time / number of intervals
-        int time = 0;
-
-
-        // Continue until:
-        // 1. No task is left in the heap
-        // 2. No task is waiting in cooldown
-        while (!pq.empty() || !cooldown.empty()) {
-
-            // Move to the next time interval
-            time++;
-
-
-            // If there is a task available to execute
-            if (!pq.empty()) {
-
-                // Get the task with the highest remaining frequency
-                int count = pq.top();
-                pq.pop();
-
-
-                // Execute this task once
-                count--;
-
-
-                // If this task still has remaining occurrences,
-                // put it into cooldown.
-                if (count > 0) {
-
-                    // It can be used again after 'n' intervals.
-                    cooldown.push({count, time + n});
+        
+        while(!pq.empty()) {
+            vector<int> temp;
+            for(int i = 1; i<=p+1; i++) {
+                //filling first p+1 characters
+                if(!pq.empty()) {
+                    temp.push_back(pq.top()-1); //finishing one instance of each process
+                    pq.pop();
                 }
             }
-
-
-            // Check whether the task at the front of the
-            // cooldown queue has completed its cooldown.
-            //
-            // If available, move it back into the max heap.
-            if (!cooldown.empty() &&
-                cooldown.front().second == time) {
-
-                // Get the task's remaining frequency
-                int count = cooldown.front().first;
-
-                cooldown.pop();
-
-                // Task is available again
-                pq.push(count);
+            
+            for(int &freq : temp) {
+                if(freq > 0)
+                    pq.push(freq);
             }
+            
+            if(pq.empty()) //all processes finished
+                time += temp.size();
+            else
+                time += (p+1); //we finished p+1 tasks above in the loop
+            
         }
-
-
-        // Total time includes both:
-        // - actual task executions
-        // - idle intervals
+        
         return time;
     }
 };
