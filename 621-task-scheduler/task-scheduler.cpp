@@ -13,7 +13,7 @@ public:
         //so that we don't have to finish in the last with p gaps.
         int time = 0;
         
-        for(auto &it : mp) {
+        for(auto it : mp) {
             pq.push(it.second);
         }
         
@@ -27,7 +27,7 @@ public:
                 }
             }
             
-            for(int &freq : temp) {
+            for(int freq : temp) {
                 if(freq > 0)
                     pq.push(freq);
             }
